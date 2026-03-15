@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>⚡ Electrician Toolkit Pro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+--bg:#f0f4ff;--card:#fff;--text:#1a1a2e;--text2:#555577;--border:#d0d8ff;
+--primary:#1565C0;--primary2:#1E88E5;--accent:#FFC107;--green:#1B5E20;
+--red:#BF360C;--purple:#6A1B9A;--teal:#00695C;--brown:#4E342E;--slate:#37474F;
+--shadow:0 2px 12px rgba(21,101,192,.13);--radius:14px;--radius2:10px;
+}
+.dark{
+--bg:#0D1117;--card:#161B22;--text:#E6EDF3;--text2:#8B949E;--border:#30363D;
+--shadow:0 2px 12px rgba(0,0,0,.4);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+/* NAV */
+.topbar{background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.topbar h1{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.topbar-btn{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:6px 10px;font-size:18px;cursor:pointer}
+.botnav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;z-index:100;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
+.botnav button{flex:1;border:none;background:none;padding:10px 4px 8px;font-size:10px;color:var(--text2);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
+.botnav button.active{color:var(--primary)}
+.botnav button .ico{font-size:22px}
+/* SCREENS */
+.screen{display:none;padding:14px 14px 90px;min-height:calc(100vh - 56px)}
+.screen.active{display:block}
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--primary),var(--primary2));border-radius:var(--radius);padding:20px;color:#fff;margin-bottom:14px}
+.hero h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.hero p{font-size:13px;opacity:.85}
+.hero-stats{display:flex;gap:20px;margin-top:14px}
+.hstat{display:flex;flex-direction:column}
+.hstat span:first-child{font-size:18px;font-weight:800;color:var(--accent)}
+.hstat span:last-child{font-size:10px;opacity:.75}
+/* CALC GRID */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.calc-tile{border-radius:var(--radius);padding:16px;cursor:pointer;border:1.5px solid transparent;transition:transform .15s}
+.calc-tile:active{transform:scale(.97)}
+.calc-tile .ico{font-size:28px;margin-bottom:8px}
+.calc-tile h3{font-size:13px;font-weight:700;line-height:1.3}
+.calc-tile p{font-size:11px;margin-top:3px;opacity:.65}
+/* INPUTS */
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;color:var(--text2)}
+.field label span{background:var(--primary);color:#fff;font-size:10px;padding:1px 7px;border-radius:20px;margin-left:5px;font-weight:600}
+input[type=text],input[type=number],select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius2);background:var(--bg);color:var(--text);font-size:15px;outline:none;transition:border .2s}
+input:focus,select:focus{border-color:var(--primary)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M6 8L0 0h12z' fill='%231565C0'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+/* BUTTONS */
+.btn{width:100%;padding:14px;border:none;border-radius:var(--radius2);font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .1s}
+.btn:active{transform:scale(.98);opacity:.9}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-row{display:flex;gap:10px}
+.btn-row .btn{flex:1}
+.btn-outline{background:transparent;border:1.5px solid var(--primary);color:var(--primary)}
+/* RESULT */
+.result-box{background:linear-gradient(135deg,var(--primary),var(--primary2));border-radius:var(--radius);padding:18px;margin-top:12px;color:#fff}
+.result-box h4{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;opacity:.9}
+.result-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.15)}
+.result-item:last-child{border:none}
+.result-item .rlabel{font-size:12px;opacity:.8}
+.result-item .rvalue{font-size:14px;font-weight:700}
+.result-actions{display:flex;gap:8px;margin-top:12px}
+.result-actions button{flex:1;padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,.2);color:#fff;font-size:12px;font-weight:600;cursor:pointer}
+/* TOGGLE GROUP */
+.tgroup{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tgroup button{flex:1;padding:9px 8px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;min-width:70px}
+.tgroup button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+/* ERRORS */
+.err{background:#ffeeee;border:1px solid #ffbbbb;color:#c62828;border-radius:8px;padding:10px 12px;font-size:13px;margin-top:8px;display:none}
+.err.show{display:block}
+/* SECTION HEADING */
+.sh{display:flex;align-items:center;gap:8px;margin:16px 0 10px;font-size:13px;font-weight:700;color:var(--primary)}
+.sh::after{content:'';flex:1;height:1px;background:var(--border);margin-left:4px}
+/* FORMULA BOX */
+.fbox{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius2);padding:12px;font-family:monospace;font-size:12px;line-height:1.9;margin-top:10px;color:var(--text2)}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--primary);color:#fff;padding:9px 8px;text-align:left}
+.tbl td{padding:8px;border-bottom:1px solid var(--border)}
+.tbl tr:nth-child(even) td{background:var(--bg)}
+/* CHIP */
+.chip{display:inline-block;padding:5px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;margin:3px;border:1.5px solid var(--border);background:var(--bg);color:var(--text2)}
+.chip.sel{background:var(--primary);color:#fff;border-color:var(--primary)}
+/* HISTORY */
+.hist-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);padding:12px;margin-bottom:8px;cursor:pointer}
+.hist-item h4{font-size:13px;font-weight:700}
+.hist-item p{font-size:11px;color:var(--text2);margin-top:2px}
+.hist-item .hist-res{font-size:12px;color:var(--primary);font-weight:600;margin-top:6px}
+/* SCROLLABLE */
+.scroll-x{overflow-x:auto}
+/* BACK BTN */
+.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;color:var(--primary);font-size:14px;font-weight:600;cursor:pointer;margin-bottom:14px;padding:0}
+/* REF ACCORDION */
+.acc-item{border:1px solid var(--border);border-radius:var(--radius2);margin-bottom:8px;overflow:hidden}
+.acc-head{width:100%;background:var(--card);border:none;padding:13px 14px;text-align:left;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.acc-body{display:none;padding:0 12px 12px;background:var(--card)}
+.acc-body.open{display:block}
+.formula-row{background:var(--bg);border-radius:8px;padding:10px;margin-top:8px}
+.formula-row .fn{font-size:11px;color:var(--primary);font-weight:600;margin-bottom:3px}
+.formula-row .ff{font-size:13px;font-family:monospace;font-weight:700;color:var(--text)}
+.formula-row .fh{font-size:10px;color:var(--text2);margin-top:2px}
+/* RESISTOR ROWS */
+.r-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.r-row input{flex:1}
+.r-del{background:#ffeeee;border:1px solid #ffbbbb;color:#c62828;border-radius:8px;padding:8px 12px;font-size:16px;cursor:pointer;border:none}
+/* HOME LOAD TABLE */
+.load-row{display:grid;grid-template-columns:1fr 70px 50px 60px 28px;gap:6px;align-items:center;margin-bottom:8px}
+.load-row input{padding:8px 10px;font-size:13px}
+.load-del{background:none;border:none;color:#c62828;font-size:18px;cursor:pointer}
+.load-sum{background:var(--green);color:#fff;border-radius:var(--radius2);padding:12px;margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ls{display:flex;flex-direction:column}
+.ls span:first-child{font-size:11px;opacity:.8}
+.ls span:last-child{font-size:16px;font-weight:800}
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center}
+.modal-bg.show{display:flex}
+.modal{background:var(--card);border-radius:20px 20px 0 0;padding:20px;width:100%;max-height:80vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.modal-close{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text2)}
+/* PULSE ANIM */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.calculating{animation:pulse .8s infinite}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <h1><span>⚡</span> Electrician Toolkit Pro</h1>
+  <button class="topbar-btn" onclick="toggleDark()" id="darkBtn">🌙</button>
+</div>
+
+<!-- SCREENS -->
+
+<!-- HOME -->
+<div class="screen active" id="s-home">
+  <div class="hero">
+    <h2>⚡ Welcome!</h2>
+    <p>Professional electrical calculations at your fingertips.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span>10+</span><span>Calculators</span></div>
+      <div class="hstat"><span>100%</span><span>Offline</span></div>
+      <div class="hstat"><span>Free</span><span>Forever</span></div>
+    </div>
+  </div>
+
+  <div class="sh">Quick Access</div>
+  <div class="calc-grid">
+    <div class="calc-tile" style="background:#e3f0ff;border-color:#90bce8" onclick="openCalc('ohm')">
+      <div class="ico">⚡</div><h3>Ohm's Law</h3><p>Find V, I or R</p>
+    </div>
+    <div class="calc-tile" style="background:#f3e5f5;border-color:#ce93d8" onclick="openCalc('power')">
+      <div class="ico">🔌</div><h3>Power Calc</h3><p>P = V × I</p>
+    </div>
+    <div class="calc-tile" style="background:#e8f5e9;border-color:#a5d6a7" onclick="openCalc('cable')">
+      <div class="ico">🔵</div><h3>Cable Size</h3><p>Auto CSA select</p>
+    </div>
+    <div class="calc-tile" style="background:#fbe9e7;border-color:#ffab91" onclick="openCalc('vdrop')">
+      <div class="ico">📉</div><h3>Voltage Drop</h3><p>1Φ & 3Φ drop</p>
+    </div>
+  </div>
+
+  <div class="sh">Recent Calculations</div>
+  <div id="hist-home">
+    <div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">
+      📋 No calculations yet. Start calculating!
+    </div>
+  </div>
+</div>
+
+<!-- CALCULATORS SCREEN -->
+<div class="screen" id="s-calc">
+  <div id="calc-list">
+    <div class="card-title" style="font-size:16px;font-weight:800;margin-bottom:14px">All Calculators</div>
+    <div class="calc-grid">
+      <div class="calc-tile" style="background:#e3f0ff;border-color:#90bce8" onclick="openCalc('ohm')">
+        <div class="ico">⚡</div><h3>Ohm's Law</h3><p>Find V, I or R</p>
+      </div>
+      <div class="calc-tile" style="background:#f3e5f5;border-color:#ce93d8" onclick="openCalc('power')">
+        <div class="ico">🔌</div><h3>Power Calc</h3><p>P, V, I formulas</p>
+      </div>
+      <div class="calc-tile" style="background:#e8f5e9;border-color:#a5d6a7" onclick="openCalc('cable')">
+        <div class="ico">🔵</div><h3>Cable Size</h3><p>CSA calculator</p>
+      </div>
+      <div class="calc-tile" style="background:#fbe9e7;border-color:#ffab91" onclick="openCalc('vdrop')">
+        <div class="ico">📉</div><h3>Voltage Drop</h3><p>1Φ & 3Φ</p>
+      </div>
+      <div class="calc-tile" style="background:#fff3e0;border-color:#ffcc80" onclick="openCalc('energy')">
+        <div class="ico">💡</div><h3>Energy Cost</h3><p>kWh & cost</p>
+      </div>
+      <div class="calc-tile" style="background:#e0f2f1;border-color:#80cbc4" onclick="openCalc('phase')">
+        <div class="ico">〰️</div><h3>Phase Power</h3><p>P, S, Q calc</p>
+      </div>
+      <div class="calc-tile" style="background:#eceff1;border-color:#b0bec5" onclick="openCalc('motor')">
+        <div class="ico">⚙️</div><h3>Motor Current</h3><p>FLA calculator</p>
+      </div>
+      <div class="calc-tile" style="background:#efebe9;border-color:#bcaaa4" onclick="openCalc('trans')">
+        <div class="ico">🔄</div><h3>Transformer</h3><p>kVA, turns ratio</p>
+      </div>
+      <div class="calc-tile" style="background:#e8eaf6;border-color:#9fa8da" onclick="openCalc('resist')">
+        <div class="ico">🔗</div><h3>Resistance</h3><p>Series & parallel</p>
+      </div>
+      <div class="calc-tile" style="background:#fce4ec;border-color:#f48fb1" onclick="openCalc('unit')">
+        <div class="ico">↔️</div><h3>Unit Converter</h3><p>V, A, W, kW, HP</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR PANELS (hidden by default) -->
+  <div id="calc-panel" style="display:none">
+    <button class="back-btn" onclick="closeCalc()">← Back</button>
+    <div id="calc-content"></div>
+  </div>
+</div>
+
+<!-- TOOLS SCREEN -->
+<div class="screen" id="s-tools">
+  <div id="tools-list">
+    <div class="card-title" style="font-size:16px;font-weight:800;margin-bottom:14px">Extra Tools</div>
+    <div class="card" onclick="showTool('wire')" style="cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:32px">📋</div>
+        <div><div style="font-weight:700;font-size:14px">Wire Gauge Chart</div><div style="font-size:12px;color:var(--text2);margin-top:2px">AWG reference — dia, area, Cu & Al amps</div></div>
+        <span style="margin-left:auto;color:var(--text2)">›</span>
+      </div>
+    </div>
+    <div class="card" onclick="showTool('speed')" style="cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:32px">⚙️</div>
+        <div><div style="font-weight:700;font-size:14px">Motor Speed Calculator</div><div style="font-size:12px;color:var(--text2);margin-top:2px">Sync speed & actual RPM</div></div>
+        <span style="margin-left:auto;color:var(--text2)">›</span>
+      </div>
+    </div>
+    <div class="card" onclick="showTool('load')" style="cursor:pointer">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:32px">🏠</div>
+        <div><div style="font-weight:700;font-size:14px">Home Load Calculator</div><div style="font-size:12px;color:var(--text2);margin-top:2px">Total household load & cost</div></div>
+        <span style="margin-left:auto;color:var(--text2)">›</span>
+      </div>
+    </div>
+  </div>
+  <div id="tool-panel" style="display:none">
+    <button class="back-btn" onclick="closeTool()">← Back</button>
+    <div id="tool-content"></div>
+  </div>
+</div>
+
+<!-- REFERENCE SCREEN -->
+<div class="screen" id="s-ref">
+  <div class="card-title" style="font-size:16px;font-weight:800;margin-bottom:14px">📖 Formula Reference</div>
+  <input type="text" placeholder="Search formulas..." id="ref-search" oninput="filterRef()" style="margin-bottom:14px">
+  <div id="ref-list"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="botnav">
+  <button class="active" id="nav-home" onclick="navTo('home')"><span class="ico">🏠</span>Home</button>
+  <button id="nav-calc" onclick="navTo('calc')"><span class="ico">🔢</span>Calculators</button>
+  <button id="nav-tools" onclick="navTo('tools')"><span class="ico">🔧</span>Tools</button>
+  <button id="nav-ref" onclick="navTo('ref')"><span class="ico">📖</span>Reference</button>
+</div>
+
+<script>
+// ============================================================
+//  STATE & UTILITIES
+// ============================================================
+let history_data = JSON.parse(localStorage.getItem('etp_history')||'[]');
+let isDark = localStorage.getItem('etp_dark')==='1';
+if(isDark) document.body.classList.add('dark'),document.getElementById('darkBtn').textContent='☀️';
+
+function toggleDark(){
+  isDark=!isDark;
+  document.body.classList.toggle('dark',isDark);
+  document.getElementById('darkBtn').textContent=isDark?'☀️':'🌙';
+  localStorage.setItem('etp_dark',isDark?'1':'0');
+}
+
+function navTo(s){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.botnav button').forEach(x=>x.classList.remove('active'));
+  document.getElementById('s-'+s).classList.add('active');
+  document.getElementById('nav-'+s).classList.add('active');
+  if(s==='home')renderHomeHistory();
+  if(s==='ref')buildRef();
+}
+
+function n(v,d=4){return isNaN(v)||!isFinite(v)?'—':Number(v).toFixed(d)}
+function pf(v){let x=parseFloat(v);return(isNaN(x)||x<=0)?null:x;}
+function err(id,msg){let e=document.getElementById(id);e.textContent=msg;e.classList.add('show');}
+function clearErr(id){let e=document.getElementById(id);e.classList.remove('show');}
+
+function saveHistory(type,title,inputs,results){
+  let h={id:Date.now(),type,title,inputs,results,date:new Date().toLocaleString()};
+  history_data.unshift(h);
+  if(history_data.length>50)history_data.pop();
+  localStorage.setItem('etp_history',JSON.stringify(history_data));
+  renderHomeHistory();
+}
+
+function renderHomeHistory(){
+  let el=document.getElementById('hist-home');
+  if(!history_data.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">📋 No calculations yet. Start calculating!</div>';return;}
+  el.innerHTML=history_data.slice(0,5).map(h=>`
+    <div class="hist-item">
+      <h4>${h.title}</h4>
+      <p>${h.date}</p>
+      <div class="hist-res">${h.results.split('\n')[0]}</div>
+    </div>`).join('');
+}
+
+function shareText(txt){
+  if(navigator.share){navigator.share({title:'Electrician Toolkit Pro',text:txt});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(txt);alert('Copied to clipboard!');}
+  else alert(txt);
+}
+
+function makeResultHTML(items,onSave,onShare){
+  return `<div class="result-box">
+    <h4>✅ Results</h4>
+    ${items.map(i=>`<div class="result-item"><span class="rlabel">${i.l}</span><span class="rvalue">${i.v}${i.u?' '+i.u:''}</span></div>`).join('')}
+    <div class="result-actions">
+      <button onclick="${onSave}">💾 Save</button>
+      <button onclick="${onShare}">📤 Share</button>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+//  NAVIGATION TO CALCULATORS
+// ============================================================
+function openCalc(id){
+  navTo('calc');
+  document.getElementById('calc-list').style.display='none';
+  document.getElementById('calc-panel').style.display='block';
+  document.getElementById('calc-content').innerHTML=getCalcHTML(id);
+  window._currentCalc=id;
+}
+function closeCalc(){
+  document.getElementById('calc-list').style.display='block';
+  document.getElementById('calc-panel').style.display='none';
+}
+
+// ============================================================
+//  ALL CALCULATORS HTML
+// ============================================================
+function getCalcHTML(id){
+  const calcs={
+// ─── OHM'S LAW ────────────────────────────────────────────
+ohm:`<div class="card">
+  <div class="card-title">⚡ Ohm's Law Calculator</div>
+  <div style="background:#e3f0ff;border-radius:10px;padding:12px;display:flex;justify-content:space-around;margin-bottom:14px">
+    <div style="text-align:center"><div style="background:var(--primary);color:#fff;width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;margin:0 auto 4px">V</div><div style="font-size:10px">Voltage</div></div>
+    <div style="align-self:center;font-size:20px;color:var(--primary)">=</div>
+    <div style="text-align:center"><div style="background:var(--teal);color:#fff;width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;margin:0 auto 4px">I</div><div style="font-size:10px">Current</div></div>
+    <div style="align-self:center;font-size:20px;color:var(--primary)">×</div>
+    <div style="text-align:center"><div style="background:var(--purple);color:#fff;width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;margin:0 auto 4px">R</div><div style="font-size:10px">Resistance</div></div>
+  </div>
+  <div class="sh">Find Unknown</div>
+  <div class="tgroup">
+    <button class="active" onclick="ohmMode(0,this)">Voltage (V)</button>
+    <button onclick="ohmMode(1,this)">Current (I)</button>
+    <button onclick="ohmMode(2,this)">Resistance (R)</button>
+  </div>
+  <div id="ohm-fields"></div>
+  <div class="err" id="ohm-err"></div>
+  <div class="btn-row" style="margin-top:12px">
+    <button class="btn btn-primary" onclick="calcOhm()">⚡ Calculate</button>
+    <button class="btn btn-outline" onclick="ohmReset()">Reset</button>
+  </div>
+  <div id="ohm-result"></div>
+  <div class="fbox">V = I × R &nbsp;|&nbsp; I = V / R &nbsp;|&nbsp; R = V / I<br>P = V × I &nbsp;|&nbsp; P = I²R &nbsp;|&nbsp; P = V²/R</div>
+</div>`,
+// ─── POWER ────────────────────────────────────────────────
+power:`<div class="card">
+  <div class="card-title">🔌 Power Calculator</div>
+  <div class="sh">Formula</div>
+  <div class="tgroup" style="flex-wrap:wrap">
+    <button class="active" onclick="pwrMode(0,this)" style="min-width:90px">P = V × I</button>
+    <button onclick="pwrMode(1,this)" style="min-width:90px">P = I²R</button>
+    <button onclick="pwrMode(2,this)" style="min-width:90px">P = V²/R</button>
+    <button onclick="pwrMode(3,this)" style="min-width:90px">I = P/V</button>
+    <button onclick="pwrMode(4,this)" style="min-width:90px">V = P/I</button>
+  </div>
+  <div id="pwr-fields"></div>
+  <div class="err" id="pwr-err"></div>
+  <div class="btn-row" style="margin-top:12px">
+    <button class="btn btn-primary" onclick="calcPwr()">⚡ Calculate</button>
+    <button class="btn btn-outline" onclick="pwrReset()">Reset</button>
+  </div>
+  <div id="pwr-result"></div>
+</div>`,
+// ─── CABLE SIZE ────────────────────────────────────────────
+cable:`<div class="card">
+  <div class="card-title">🔵 Cable Size Calculator</div>
+  <div class="field"><label>Load Current <span>A</span></label><input type="number" id="cb-i" placeholder="e.g. 25"></div>
+  <div class="field"><label>Cable Length (one-way) <span>m</span></label><input type="number" id="cb-l" placeholder="e.g. 50"></div>
+  <div class="field"><label>Supply Voltage <span>V</span></label><input type="number" id="cb-v" value="230"></div>
+  <div class="field"><label>Max Voltage Drop <span>%</span></label><input type="number" id="cb-d" value="3"></div>
+  <div class="sh">Options</div>
+  <div class="tgroup">
+    <button class="active" id="cb-cu" onclick="cbMat(1)">🔶 Copper</button>
+    <button id="cb-al" onclick="cbMat(0)">⬜ Aluminium</button>
+  </div>
+  <div class="tgroup">
+    <button class="active" id="cb-1p" onclick="cbPh(0)">1-Phase</button>
+    <button id="cb-3p" onclick="cbPh(1)">3-Phase</button>
+  </div>
+  <div class="err" id="cb-err"></div>
+  <div class="btn-row" style="margin-top:12px">
+    <button class="btn btn-primary" onclick="calcCable()">🔵 Calculate Size</button>
+    <button class="btn btn-outline" onclick="cbReset()">Reset</button>
+  </div>
+  <div id="cb-result"></div>
+  <div class="fbox">A = ρ × 2L × I / ΔV &nbsp;(copper ρ = 1.72×10⁻⁸ Ω·m)</div>
+</div>`,
+// ─── VOLTAGE DROP ────────────────────────────────────────
+vdrop:`<div class="card">
+  <div class="card-title">📉 Voltage Drop Calculator</div>
+  <div class="field"><label>Current <span>A</span></label><input type="number" id="vd-i" placeholder="e.g. 20"></div>
+  <div class="field"><label>Cable Length (one-way) <span>m</span></label><input type="number" id="vd-l" placeholder="e.g. 30"></div>
+  <div class="field"><label>Cable CSA <span>mm²</span></label><input type="number" id="vd-a" placeholder="e.g. 4"></div>
+  <div class="field"><label>Supply Voltage <span>V</span></label><input type="number" id="vd-v" value="230"></div>
+  <div class="sh">Options</div>
+  <div class="tgroup">
+    <button class="active" id="vd-cu" onclick="vdMat(1)">🔶 Copper</button>
+    <button id="vd-al" onclick="vdMat(0)">⬜ Aluminium</button>
+  </div>
+  <div class="tgroup">
+    <button class="active" id="vd-1p" onclick="vdPh(0)">1-Phase</button>
+    <button id="vd-3p" onclick="vdPh(1)">3-Phase</button>
+  </div>
+  <div class="err" id="vd-err"></div>
+  <div class="btn-row" style="margin-top:12px">
+    <button class="btn btn-primary" onclick="calcVdrop()">📉 Calculate</button>
+    <button class="btn btn-outline" onclick="vdReset()">Reset</button>
+  </div>
+  <div id="vd-result"></div>
+  <div class="fbox">1Φ: ΔV = 2ρLI/A &nbsp;|&nbsp; 3Φ: ΔV = √3ρLI/A</div>
+</div>`,
+// ─── ENERGY ────────────────────────────────────────────
+energy:`<div class="card">
+  <div class="card-title">💡 Energy Consumption Calculator</div>
+  <div class="field"><label>Power Rating <span>W</span></label><input type="number" id="en-p" placeholder="e.g. 1500"></div>
+  <div class="field"><label>Hours Used Per Day <span>h</span></label><input type="number" id="en-h" placeholder="e.g. 8"></div>
+  <div class="field"><label>Number of Days</label><input type="number" id="en-d" value="30"></div>
+  <div class="field"><label>Electricity Tariff <span>₹/kWh</span></label><input type="number" id="en-r" value="8"></div>
+  <div class="sh">Common Appliances (tap to fill)</div>
+  <div>
+    ${[['LED Bulb',9],['Fan',75],['TV',120],['Fridge',150],['Washing M.',500],['AC 1T',1000],['AC 1.5T',1500],['Geyser',2000],['Water Pump',750],['Iron',1000]].map(a=>`<span class="chip" onclick="document.getElementById('en-p').value=${a[1]}">${a[0]} ${a[1]}W</span>`).join('')}
+  </div>
+  <div class="err" id="en-err"></div>
+  <div class="btn-row" style="margin-top:12px">
+    <button class="btn btn-primary" onclick="calcEnergy()">💡 Calculate Cost</button>
+    <button class="btn btn-outline" onclick="enReset()">Reset</button>
+  </div>
+  <div id="en-result"></div>
+</div>`,
+// ─── PHASE POWER ──────────────────────────────────────
+phase:`<div class="card">
+  <div class="card-title">〰️ Phase Power Calculator</div>
+  <div class="tgroup">
+    <button class="active" id="ph-1" onclick="phMode(0)">1-Phase</button>
+    <button id="ph-3" onclick="phMode(1)">3-Phase</button>
+  </div>
+  <div id="ph-label1" class="field"><label id="ph-vl">Voltage <span>V</span></label><input type="number" id="ph-v" placeholder="e.g. 230"></div>
+  <div class="field"><label id="ph-il">Current <span>A</span></label><input type="number" id="ph-i" placeholder="e.g. 10"></div>
+  <div class="field"><label>Power Factor (cos φ) <span>0-1</span></label><input type="number" id="ph-pf" value="0.85" step="0.01" min="0" max="1"></div>
+  <div class="err" id="ph-err"></div>
+  <div class="btn-row" style="margin-top:12px">
+    <button class="btn btn-primary" onclick="calcPhase()">〰️ Calculate</button>
+    <button class="btn btn-outline" onclick="phReset()">Reset</button>
+  </div>
+  <div id="ph-result"></div>
+  <div class="fbox">1Φ: P = V×I×cosφ  |  S = V×I<br>3Φ: P = √3×VL×IL×cosφ  |  S² = P² + Q²</div>
+</div>`,
+// ─── MOTOR CURRENT ────────────────────────────────────
+motor:`<div class="card">
+  <div class="card-title">⚙️ Motor Current Calculator (FLA)</div>
+  <div class="tgroup">
+    <button id="mt-1" onclick="mtMode(0)">1-Phase</button>
+    <button class="active" id="mt-3" onclick="mtMode(1)">3-Phase</button>
+  </div>
+  <div class="field"><label>Motor Power <span>kW</span></label><input type="number" id="mt-p" placeholder="e.g. 7.5"></div>
+  <div class="field"><label id="mt-vl">Line Voltage <span>V</span></label><input type="number" id="mt-v" value="415"></div>
+  <div class="field"><label>Efficiency (η) <span>0-1</span></label><input type="number" id="mt-ef" value="0.90" step="0.01"></div>
+  <div class="field"><label>Power Factor <span>0-1</span></label><input type="number" id="mt-pf" value="0.85" step="0.01"></div>
+  <div class="sh">HP Reference (tap to fill)</div>
+  <div>${[['0.5HP','0.373'],['1HP','0.746'],['2HP','1.492'],['3HP','2.238'],['5HP','3.730'],['7.5HP','5.595'],['10HP','7.460'],['15HP','11.19'],['20HP','14.92'],['25HP','18.65']].map(a=>`<span class="chip" onclick="document.getElementById('mt-p').value='${a[1]}'">${a[0]}=${a[1]}kW</span>`).join('')}</div>
+  <div class="err" id="mt-err"></div>
+  <div class="btn-row" style="margin-top:12px">
+    <button class="btn btn-primary" onclick="calcMotor()">⚙️ Calculate FLA</button>
+    <button class="btn btn-outline" onclick="mtReset()">Reset</button>
+  </div>
+  <div id="mt-result"></div>
+  <div class="fbox">3Φ: I = P / (√3 × V × η × cosφ)<br>1Φ: I = P / (V × η × cosφ)</div>
+</div>`,
+// ─── TRANSFORMER ─────────────────────────────────────
+trans:`<div class="card">
+  <div class="card-title">🔄 Transformer Calculator</div>
+  <div class="tgroup">
+    <button class="active" onclick="trMode(0,this)">kVA Rating</button>
+    <button onclick="trMode(1,this)">Currents</button>
+    <button onclick="trMode(2,this)">Turns Ratio</button>
+  </div>
+  <div id="tr-fields"></div>
+  <div class="err" id="tr-err"></div>
+  <div class="btn-row" style="margin-top:12px">
+    <button class="btn btn-primary" onclick="calcTrans()">🔄 Calculate</button>
+    <button class="btn btn-outline" onclick="trReset()">Reset</button>
+  </div>
+  <div id="tr-result"></div>
+  <div class="fbox">1Φ kVA = V×I/1000  |  3Φ kVA = √3×V×I/1000<br>Turns Ratio: a = N1/N2 = V1/V2</div>
+</div>`,
+// ─── RESISTANCE ──────────────────────────────────────
+resist:`<div class="card">
+  <div class="card-title">🔗 Resistance Calculator</div>
+  <div class="tgroup">
+    <button class="active" id="rs-s" onclick="rsMode(0)">Series</button>
+    <button id="rs-p" onclick="rsMode(1)">Parallel</button>
+  </div>
+  <div class="fbox" style="margin-bottom:12px" id="rs-formula">Series: R = R₁ + R₂ + R₃ + …</div>
+  <div id="rs-rows">
+    <div class="r-row"><input type="number" placeholder="R1 (Ω)" class="r-val"><button class="r-del" onclick="rsRemove(this)">×</button></div>
+    <div class="r-row"><input type="number" placeholder="R2 (Ω)" class="r-val"><button class="r-del" onclick="rsRemove(this)">×</button></div>
+    <div class="r-row"><input type="number" placeholder="R3 (Ω)" class="r-val"><button class="r-del" onclick="rsRemove(this)">×</button></div>
+  </div>
+  <button onclick="rsAdd()" style="background:none;border:1.5px dashed var(--border);color:var(--primary);padding:9px;border-radius:8px;width:100%;cursor:pointer;font-size:13px;font-weight:600;margin-top:4px">+ Add Resistor</button>
+  <div class="err" id="rs-err"></div>
+  <div class="btn-row" style="margin-top:12px">
+    <button class="btn btn-primary" onclick="calcResist()">🔗 Calculate</button>
+    <button class="btn btn-outline" onclick="rsReset()">Reset</button>
+  </div>
+  <div id="rs-result"></div>
+</div>`,
+// ─── UNIT CONVERTER ──────────────────────────────────
+unit:`<div class="card">
+  <div class="card-title">↔️ Unit Converter</div>
+  <div class="tgroup" style="flex-wrap:wrap">
+    <button class="active" onclick="ucCat(0,this)" style="min-width:70px">⚡ Power</button>
+    <button onclick="ucCat(1,this)" style="min-width:70px">🔌 Current</button>
+    <button onclick="ucCat(2,this)" style="min-width:70px">🔋 Voltage</button>
+    <button onclick="ucCat(3,this)" style="min-width:70px">💡 Energy</button>
+  </div>
+  <div class="field"><label>Input Value</label><input type="number" id="uc-val" placeholder="Enter value"></div>
+  <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:12px">
+    <div><label style="font-size:12px;color:var(--text2);font-weight:600">From</label><select id="uc-from" onchange="ucCalc()"></select></div>
+    <button onclick="ucSwap()" style="background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:10px;cursor:pointer;margin-top:18px">⇄</button>
+    <div><label style="font-size:12px;color:var(--text2);font-weight:600">To</label><select id="uc-to" onchange="ucCalc()"></select></div>
+  </div>
+  <button class="btn btn-primary" onclick="ucCalc()">↔️ Convert</button>
+  <div id="uc-result" style="margin-top:12px"></div>
+  <div class="fbox" style="margin-top:10px">1 HP = 745.7 W &nbsp;|&nbsp; 1 kWh = 3.6 MJ<br>1 kVA = 1 kW (at unity PF)</div>
+</div>`
+  };
+  return calcs[id]||'<div class="card">Coming soon</div>';
+}
+
+// ============================================================
+//  OHM'S LAW LOGIC
+// ============================================================
+let ohmM=0;
+function ohmMode(m,btn){
+  ohmM=m;
+  document.querySelectorAll('#s-calc .tgroup button').forEach((b,i)=>{if(i<3)b.classList.toggle('active',i===m)});
+  const f=['<div class="field"><label>Current <span>A</span></label><input type="number" id="ohm-a" placeholder="e.g. 2"></div><div class="field"><label>Resistance <span>Ω</span></label><input type="number" id="ohm-b" placeholder="e.g. 5"></div>',
+    '<div class="field"><label>Voltage <span>V</span></label><input type="number" id="ohm-a" placeholder="e.g. 10"></div><div class="field"><label>Resistance <span>Ω</span></label><input type="number" id="ohm-b" placeholder="e.g. 5"></div>',
+    '<div class="field"><label>Voltage <span>V</span></label><input type="number" id="ohm-a" placeholder="e.g. 10"></div><div class="field"><label>Current <span>A</span></label><input type="number" id="ohm-b" placeholder="e.g. 2"></div>'];
+  document.getElementById('ohm-fields').innerHTML=f[m];
+  document.getElementById('ohm-result').innerHTML='';
+  clearErr('ohm-err');
+}
+function calcOhm(){
+  const a=pf(document.getElementById('ohm-a')?.value),b=pf(document.getElementById('ohm-b')?.value);
+  if(!a||!b){err('ohm-err','Enter valid positive values.');return;}
+  clearErr('ohm-err');
+  let items=[];let title='';let shareStr='';
+  if(ohmM===0){const V=a*b,P=V*a;title=`Ohm's Law — Voltage: ${n(V,3)}V`;items=[{l:'Voltage (V)',v:n(V,4),u:'V'},{l:'Power (P)',v:n(P,4),u:'W'},{l:'Formula',v:'V = I × R',u:''}];}
+  else if(ohmM===1){const I=a/b,P=a*I;title=`Ohm's Law — Current: ${n(I,3)}A`;items=[{l:'Current (I)',v:n(I,4),u:'A'},{l:'Power (P)',v:n(P,4),u:'W'},{l:'Formula',v:'I = V / R',u:''}];}
+  else{const R=a/b,P=a*b;title=`Ohm's Law — Resistance: ${n(R,3)}Ω`;items=[{l:'Resistance (R)',v:n(R,4),u:'Ω'},{l:'Power (P)',v:n(P,4),u:'W'},{l:'Formula',v:'R = V / I',u:''}];}
+  shareStr=items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\n');
+  document.getElementById('ohm-result').innerHTML=makeResultHTML(items,
+    `saveHistory("Ohm's Law","${title}","","${shareStr.replace(/\n/,'|')}");alert("Saved!")`,
+    `shareText("⚡ Ohm's Law\\n${shareStr}")`);
+}
+function ohmReset(){document.getElementById('ohm-a').value='';document.getElementById('ohm-b').value='';document.getElementById('ohm-result').innerHTML='';clearErr('ohm-err');}
+
+// init ohm mode on load
+setTimeout(()=>{if(document.getElementById('ohm-fields'))ohmMode(0,null);},50);
+
+// ============================================================
+//  POWER LOGIC
+// ============================================================
+let pwrM=0;
+function pwrMode(m,btn){
+  pwrM=m;
+  const labels=[[['Voltage','V'],['Current','A']],[['Current','A'],['Resistance','Ω']],[['Voltage','V'],['Resistance','Ω']],[['Power','W'],['Voltage','V']],[['Power','W'],['Current','A']]];
+  const [la,lb]=labels[m];
+  document.getElementById('pwr-fields').innerHTML=`<div class="field"><label>${la[0]} <span>${la[1]}</span></label><input type="number" id="pwr-a" placeholder="Enter ${la[0]}"></div><div class="field"><label>${lb[0]} <span>${lb[1]}</span></label><input type="number" id="pwr-b" placeholder="Enter ${lb[0]}"></div>`;
+  document.getElementById('pwr-result').innerHTML='';clearErr('pwr-err');
+}
+function calcPwr(){
+  const a=pf(document.getElementById('pwr-a')?.value),b=pf(document.getElementById('pwr-b')?.value);
+  if(!a||!b){err('pwr-err','Enter valid positive values.');return;}
+  clearErr('pwr-err');
+  let items=[];let title='';
+  const fmls=['P=VI','P=I²R','P=V²/R','I=P/V','V=P/I'];
+  if(pwrM===0){const P=a*b;items=[{l:'Power (P)',v:n(P,4),u:'W'},{l:'Power (P)',v:n(P/1000,4),u:'kW'},{l:'Resistance',v:n(a/b,4),u:'Ω'}];title=`Power: ${n(P,2)}W`;}
+  else if(pwrM===1){const P=a*a*b,V=a*b;items=[{l:'Power (P)',v:n(P,4),u:'W'},{l:'Voltage (V)',v:n(V,4),u:'V'}];title=`Power: ${n(P,2)}W`;}
+  else if(pwrM===2){const P=a*a/b,I=a/b;items=[{l:'Power (P)',v:n(P,4),u:'W'},{l:'Current (I)',v:n(I,4),u:'A'}];title=`Power: ${n(P,2)}W`;}
+  else if(pwrM===3){const I=a/b;items=[{l:'Current (I)',v:n(I,4),u:'A'},{l:'Resistance',v:n(b/I,4),u:'Ω'}];title=`Current: ${n(I,2)}A`;}
+  else{const V=a/b;items=[{l:'Voltage (V)',v:n(V,4),u:'V'}];title=`Voltage: ${n(V,2)}V`;}
+  const shareStr=items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\n');
+  document.getElementById('pwr-result').innerHTML=makeResultHTML(items,
+    `saveHistory('Power','Power Calc (${fmls[pwrM]}) — ${title}','','${shareStr.replace(/\n/,'|')}');alert('Saved!')`,
+    `shareText('⚡ Power Calculation (${fmls[pwrM]})\\n${shareStr}')`);
+}
+function pwrReset(){['pwr-a','pwr-b'].forEach(i=>{let e=document.getElementById(i);if(e)e.value=''});document.getElementById('pwr-result').innerHTML='';clearErr('pwr-err');}
+setTimeout(()=>{if(document.getElementById('pwr-fields'))pwrMode(0,null);},50);
+
+// ============================================================
+//  CABLE SIZE
+// ============================================================
+let cbCu=1,cbPh3=0;
+function cbMat(v){cbCu=v;['cb-cu','cb-al'].forEach((id,i)=>document.getElementById(id)?.classList.toggle('active',i===(cbCu?0:1)));}
+function cbPh(v){cbPh3=v;['cb-1p','cb-3p'].forEach((id,i)=>document.getElementById(id)?.classList.toggle('active',i===v));}
+function calcCable(){
+  const I=pf(document.getElementById('cb-i')?.value),L=pf(document.getElementById('cb-l')?.value),
+    V=pf(document.getElementById('cb-v')?.value),D=pf(document.getElementById('cb-d')?.value);
+  if(!I||!L||!V||!D){err('cb-err','Fill all fields with valid values.');return;}
+  clearErr('cb-err');
+  const rho=cbCu?1.72e-8:2.82e-8;
+  const maxDrop=(D/100)*V;
+  const areaMm2=(rho*2*L*I/maxDrop)*1e6;
+  const std=[1,1.5,2.5,4,6,10,16,25,35,50,70,95,120,150,185,240,300];
+  const stdSize=std.find(s=>s>=areaMm2)||300;
+  const actualDrop=(cbPh3?Math.sqrt(3):2)*rho*L*I/(stdSize*1e-6);
+  const dropPct=(actualDrop/V)*100;
+  const ok=dropPct<=D;
+  const items=[
+    {l:'Calculated Min CSA',v:n(areaMm2,3),u:'mm²'},
+    {l:'Standard Cable Size',v:n(stdSize,1),u:'mm²'},
+    {l:'Actual Voltage Drop',v:n(actualDrop,3),u:'V'},
+    {l:'Drop Percentage',v:n(dropPct,2),u:'%'},
+    {l:'End Voltage',v:n(V-actualDrop,2),u:'V'},
+    {l:'Status',v:ok?'✅ Within Limit':'⚠️ Exceeds Limit',u:''},
+  ];
+  const shareStr=items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\n');
+  document.getElementById('cb-result').innerHTML=makeResultHTML(items,
+    `saveHistory('Cable','Cable Size — ${I}A, ${L}m','','${shareStr.replace(/\n/,'|')}');alert('Saved!')`,
+    `shareText('⚡ Cable Size\\n${shareStr}')`);
+}
+function cbReset(){['cb-i','cb-l'].forEach(id=>{let e=document.getElementById(id);if(e)e.value=''});document.getElementById('cb-result').innerHTML='';clearErr('cb-err');}
+
+// ============================================================
+//  VOLTAGE DROP
+// ============================================================
+let vdCu=1,vdPh3=0;
+function vdMat(v){vdCu=v;['vd-cu','vd-al'].forEach((id,i)=>document.getElementById(id)?.classList.toggle('active',i===(vdCu?0:1)));}
+function vdPh(v){vdPh3=v;['vd-1p','vd-3p'].forEach((id,i)=>document.getElementById(id)?.classList.toggle('active',i===v));}
+function calcVdrop(){
+  const I=pf(document.getElementById('vd-i')?.value),L=pf(document.getElementById('vd-l')?.value),
+    A=pf(document.getElementById('vd-a')?.value),V=pf(document.getElementById('vd-v')?.value);
+  if(!I||!L||!A||!V){err('vd-err','Fill all fields.');return;}
+  clearErr('vd-err');
+  const rho=vdCu?1.72e-8:2.82e-8;
+  const drop=(vdPh3?Math.sqrt(3):2)*rho*L*I/(A*1e-6);
+  const pct=(drop/V)*100;
+  const items=[
+    {l:'Voltage Drop',v:n(drop,3),u:'V'},
+    {l:'Drop %',v:n(pct,2),u:'%'},
+    {l:'Receiving End Voltage',v:n(V-drop,2),u:'V'},
+    {l:'IEE 3% Limit',v:pct<=3?'✅ PASS':'✗ FAIL',u:''},
+    {l:'Material',v:vdCu?'Copper':'Aluminium',u:''},
+  ];
+  const shareStr=items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\n');
+  document.getElementById('vd-result').innerHTML=makeResultHTML(items,
+    `saveHistory('VDrop','Voltage Drop — ${I}A, ${L}m, ${A}mm²','','${shareStr.replace(/\n/,'|')}');alert('Saved!')`,
+    `shareText('⚡ Voltage Drop\\n${shareStr}')`);
+}
+function vdReset(){['vd-i','vd-l','vd-a'].forEach(id=>{let e=document.getElementById(id);if(e)e.value=''});document.getElementById('vd-result').innerHTML='';clearErr('vd-err');}
+
+// ============================================================
+//  ENERGY
+// ============================================================
+function calcEnergy(){
+  const P=pf(document.getElementById('en-p')?.value),H=pf(document.getElementById('en-h')?.value),
+    D=pf(document.getElementById('en-d')?.value),R=pf(document.getElementById('en-r')?.value);
+  if(!P||!H){err('en-err','Enter power and hours.');return;}
+  clearErr('en-err');
+  const days=D||30,rate=R||8;
+  const daily=P*H/1000,monthly=daily*days,annual=daily*365;
+  const dc=daily*rate,mc=monthly*rate,ac=annual*rate;
+  const items=[
+    {l:'Daily Energy',v:n(daily,3),u:'kWh'},
+    {l:'Monthly Energy',v:n(monthly,2),u:'kWh'},
+    {l:'Annual Energy',v:n(annual,2),u:'kWh'},
+    {l:'Daily Cost',v:`₹${n(dc,2)}`,u:''},
+    {l:'Monthly Cost',v:`₹${n(mc,2)}`,u:''},
+    {l:'Annual Cost',v:`₹${n(ac,2)}`,u:''},
+  ];
+  const shareStr=items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\n');
+  document.getElementById('en-result').innerHTML=makeResultHTML(items,
+    `saveHistory('Energy','Energy — ${P}W × ${H}h/day','','${shareStr.replace(/\n/,'|')}');alert('Saved!')`,
+    `shareText('⚡ Energy Cost\\n${shareStr}')`);
+}
+function enReset(){['en-p','en-h'].forEach(id=>{let e=document.getElementById(id);if(e)e.value=''});document.getElementById('en-result').innerHTML='';clearErr('en-err');}
+
+// ============================================================
+//  PHASE POWER
+// ============================================================
+let phIs3=0;
+function phMode(m){
+  phIs3=m;
+  ['ph-1','ph-3'].forEach((id,i)=>document.getElementById(id)?.classList.toggle('active',i===m));
+  const vl=document.getElementById('ph-vl'),il=document.getElementById('ph-il');
+  if(vl)vl.innerHTML=m?'Line Voltage <span>V</span>':'Voltage <span>V</span>';
+  if(il)il.innerHTML=m?'Line Current <span>A</span>':'Current <span>A</span>';
+  const vi=document.getElementById('ph-v');if(vi)vi.value=m?415:230;
+}
+function calcPhase(){
+  const V=pf(document.getElementById('ph-v')?.value),I=pf(document.getElementById('ph-i')?.value),PF=pf(document.getElementById('ph-pf')?.value);
+  if(!V||!I||!PF){err('ph-err','Fill all fields.');return;}
+  if(PF>1){err('ph-err','Power factor must be 0 to 1.');return;}
+  clearErr('ph-err');
+  const S=phIs3?Math.sqrt(3)*V*I:V*I;
+  const P=S*PF,Q=S*Math.sqrt(Math.max(0,1-PF*PF));
+  const items=[
+    {l:'Real Power (P)',v:n(P,2),u:'W'},
+    {l:'Real Power (P)',v:n(P/1000,4),u:'kW'},
+    {l:'Apparent Power (S)',v:n(S,2),u:'VA'},
+    {l:'Apparent Power (S)',v:n(S/1000,4),u:'kVA'},
+    {l:'Reactive Power (Q)',v:n(Q,2),u:'VAR'},
+    {l:'Power Factor',v:n(PF,3),u:''},
+    ...(phIs3?[{l:'Phase Voltage (Vp)',v:n(V/Math.sqrt(3),2),u:'V'}]:[]),
+  ];
+  const shareStr=items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\n');
+  document.getElementById('ph-result').innerHTML=makeResultHTML(items,
+    `saveHistory('Phase','${phIs3?'3-Phase':'1-Phase'} Power — ${n(P/1000,2)}kW','','${shareStr.replace(/\n/,'|')}');alert('Saved!')`,
+    `shareText('⚡ Phase Power\\n${shareStr}')`);
+}
+function phReset(){['ph-v','ph-i'].forEach(id=>{let e=document.getElementById(id);if(e)e.value=''});document.getElementById('ph-result').innerHTML='';clearErr('ph-err');}
+
+// ============================================================
+//  MOTOR CURRENT
+// ============================================================
+let mtIs3=1;
+function mtMode(m){
+  mtIs3=m;
+  ['mt-1','mt-3'].forEach((id,i)=>document.getElementById(id)?.classList.toggle('active',i===m));
+  const vl=document.getElementById('mt-vl');if(vl)vl.innerHTML=m?'Line Voltage <span>V</span>':'Supply Voltage <span>V</span>';
+  const vi=document.getElementById('mt-v');if(vi)vi.value=m?415:230;
+}
+function calcMotor(){
+  const P=pf(document.getElementById('mt-p')?.value),V=pf(document.getElementById('mt-v')?.value),
+    ef=pf(document.getElementById('mt-ef')?.value),pf2=pf(document.getElementById('mt-pf')?.value);
+  if(!P||!V||!ef||!pf2){err('mt-err','Fill all fields.');return;}
+  if(ef>1||pf2>1){err('mt-err','Efficiency and PF must be ≤ 1.');return;}
+  clearErr('mt-err');
+  const fla=mtIs3?(P*1000)/(Math.sqrt(3)*V*ef*pf2):(P*1000)/(V*ef*pf2);
+  const items=[
+    {l:'Full Load Amps (FLA)',v:n(fla,3),u:'A'},
+    {l:'DOL Starting Current',v:n(fla*6.5,2),u:'A'},
+    {l:'Star-Delta Starting',v:n(fla*6.5/3,2),u:'A'},
+    {l:'Breaker Size (min)',v:n(fla*1.25,2),u:'A'},
+    {l:'Overload Setting',v:`${n(fla,2)} — ${n(fla*1.05,2)}`,u:'A'},
+  ];
+  const shareStr=items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\n');
+  document.getElementById('mt-result').innerHTML=makeResultHTML(items,
+    `saveHistory('Motor','Motor ${P}kW ${mtIs3?'3Φ':'1Φ'} — FLA: ${n(fla,2)}A','','${shareStr.replace(/\n/,'|')}');alert('Saved!')`,
+    `shareText('⚡ Motor FLA\\n${shareStr}')`);
+}
+function mtReset(){['mt-p'].forEach(id=>{let e=document.getElementById(id);if(e)e.value=''});document.getElementById('mt-result').innerHTML='';clearErr('mt-err');}
+
+// ============================================================
+//  TRANSFORMER
+// ============================================================
+let trM=0,trIs3=0;
+function trMode(m,btn){
+  trM=m;
+  const fields=[
+    `<div class="tgroup"><button ${trIs3?'':'class="active"'} onclick="trPh(0)">1-Phase</button><button ${trIs3?'class="active"':''} onclick="trPh(1)">3-Phase</button></div><div class="field"><label id="tr-vl">Voltage <span>V</span></label><input type="number" id="tr-v" placeholder="e.g. 230"></div><div class="field"><label>Current <span>A</span></label><input type="number" id="tr-i" placeholder="e.g. 100"></div>`,
+    `<div class="tgroup"><button ${trIs3?'':'class="active"'} onclick="trPh(0)">1-Phase</button><button ${trIs3?'class="active"':''} onclick="trPh(1)">3-Phase</button></div><div class="field"><label>Rating <span>kVA</span></label><input type="number" id="tr-kva" placeholder="e.g. 100"></div><div class="field"><label>Primary Voltage <span>V</span></label><input type="number" id="tr-pv" placeholder="e.g. 11000"></div><div class="field"><label>Secondary Voltage <span>V</span></label><input type="number" id="tr-sv" placeholder="e.g. 415"></div>`,
+    `<div class="field"><label>Primary Voltage (V1) <span>V</span></label><input type="number" id="tr-pv2" placeholder="e.g. 11000"></div><div class="field"><label>Secondary Voltage (V2) <span>V</span></label><input type="number" id="tr-sv2" placeholder="e.g. 415"></div>`,
+  ];
+  document.getElementById('tr-fields').innerHTML=fields[m];
+  document.getElementById('tr-result').innerHTML='';clearErr('tr-err');
+}
+function trPh(v){trIs3=v;}
+function calcTrans(){
+  clearErr('tr-err');
+  let items=[];
+  if(trM===0){
+    const V=pf(document.getElementById('tr-v')?.value),I=pf(document.getElementById('tr-i')?.value);
+    if(!V||!I){err('tr-err','Enter voltage and current.');return;}
+    const kva=trIs3?Math.sqrt(3)*V*I/1000:V*I/1000;
+    const priI=kva*1000/V;
+    items=[{l:'Transformer Rating',v:n(kva,3),u:'kVA'},{l:'Rating (VA)',v:n(kva*1000,1),u:'VA'}];
+  }else if(trM===1){
+    const kva=pf(document.getElementById('tr-kva')?.value),pv=pf(document.getElementById('tr-pv')?.value),sv=pf(document.getElementById('tr-sv')?.value);
+    if(!kva||!pv||!sv){err('tr-err','Fill all fields.');return;}
+    const pi=kva*1000/pv,si=kva*1000/sv,r=pv/sv;
+    items=[{l:'Primary Current',v:n(pi,3),u:'A'},{l:'Secondary Current',v:n(si,3),u:'A'},{l:'Turns Ratio (N1:N2)',v:`${n(r,3)} : 1`,u:''}];
+  }else{
+    const pv=pf(document.getElementById('tr-pv2')?.value),sv=pf(document.getElementById('tr-sv2')?.value);
+    if(!pv||!sv){err('tr-err','Enter both voltages.');return;}
+    const r=pv/sv;
+    items=[{l:'Turns Ratio',v:`${n(r,4)} : 1`,u:''},{l:'Type',v:sv<pv?'Step-Down ↓':'Step-Up ↑',u:''},{l:'Ratio',v:`${pv} : ${sv}`,u:'V'}];
+  }
+  const shareStr=items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\n');
+  document.getElementById('tr-result').innerHTML=makeResultHTML(items,
+    `saveHistory('Transformer','Transformer Calc','','${shareStr.replace(/\n/,'|')}');alert('Saved!')`,
+    `shareText('⚡ Transformer\\n${shareStr}')`);
+}
+function trReset(){document.getElementById('tr-result').innerHTML='';clearErr('tr-err');}
+setTimeout(()=>{if(document.getElementById('tr-fields'))trMode(0,null);},50);
+
+// ============================================================
+//  RESISTANCE
+// ============================================================
+let rsIsPar=0;
+function rsMode(m){
+  rsIsPar=m;
+  document.getElementById('rs-s')?.classList.toggle('active',!m);
+  document.getElementById('rs-p')?.classList.toggle('active',!!m);
+  const f=document.getElementById('rs-formula');
+  if(f)f.textContent=m?'Parallel: 1/R = 1/R₁ + 1/R₂ + …':'Series: R = R₁ + R₂ + R₃ + …';
+}
+function rsAdd(){
+  const rows=document.getElementById('rs-rows');
+  const n2=rows.querySelectorAll('.r-row').length+1;
+  const d=document.createElement('div');d.className='r-row';
+  d.innerHTML=`<input type="number" placeholder="R${n2} (Ω)" class="r-val"><button class="r-del" onclick="rsRemove(this)">×</button>`;
+  rows.appendChild(d);
+}
+function rsRemove(btn){
+  const rows=document.getElementById('rs-rows');
+  if(rows.querySelectorAll('.r-row').length>2)btn.parentElement.remove();
+}
+function calcResist(){
+  const vals=[...document.querySelectorAll('.r-val')].map(i=>pf(i.value));
+  if(vals.some(v=>!v)){err('rs-err','Enter valid resistance for all fields.');return;}
+  clearErr('rs-err');
+  let total;
+  if(rsIsPar){const sumRec=vals.reduce((s,v)=>s+1/v,0);total=1/sumRec;}
+  else total=vals.reduce((s,v)=>s+v,0);
+  const G=total>0?1/total:0;
+  const items=[
+    {l:'Total Resistance',v:n(total,5),u:'Ω'},
+    {l:'Connection',v:rsIsPar?'Parallel':'Series',u:''},
+    {l:'Conductance (G)',v:n(G,5),u:'S'},
+    {l:'Count',v:vals.length,u:'resistors'},
+  ];
+  const shareStr=items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\n');
+  document.getElementById('rs-result').innerHTML=makeResultHTML(items,
+    `saveHistory('Resistance','${rsIsPar?'Parallel':'Series'} Resistance — ${n(total,3)}Ω','','${shareStr.replace(/\n/,'|')}');alert('Saved!')`,
+    `shareText('⚡ Resistance\\n${shareStr}')`);
+}
+function rsReset(){document.querySelectorAll('.r-val').forEach(i=>i.value='');document.getElementById('rs-result').innerHTML='';clearErr('rs-err');}
+
+// ============================================================
+//  UNIT CONVERTER
+// ============================================================
+const ucUnits=[
+  [{n:'Watt (W)',f:v=>v},{n:'Kilowatt (kW)',f:v=>v/1000},{n:'Megawatt (MW)',f:v=>v/1e6},{n:'Horsepower (HP)',f:v=>v/745.7},{n:'BTU/hr',f:v=>v/0.29307},{n:'kVA (pf=1)',f:v=>v/1000}],
+  [{n:'Ampere (A)',f:v=>v},{n:'Milliampere (mA)',f:v=>v/1000},{n:'Kiloampere (kA)',f:v=>v*1000},{n:'Microampere (μA)',f:v=>v/1e6}],
+  [{n:'Volt (V)',f:v=>v},{n:'Millivolt (mV)',f:v=>v/1000},{n:'Kilovolt (kV)',f:v=>v*1000},{n:'Megavolt (MV)',f:v=>v*1e6}],
+  [{n:'kWh',f:v=>v},{n:'Wh',f:v=>v*1000},{n:'MWh',f:v=>v/1000},{n:'Megajoule (MJ)',f:v=>v*3.6},{n:'Joule (J)',f:v=>v*3.6e6},{n:'BTU',f:v=>v*3412.14},{n:'kcal',f:v=>v*859.845}],
+];
+// toWatt/toBase conversions
+const ucToBase=[
+  [v=>v,v=>v*1000,v=>v*1e6,v=>v*745.7,v=>v*0.29307,v=>v*1000],
+  [v=>v,v=>v*1000,v=>v/1000,v=>v*1e6],
+  [v=>v,v=>v*1000,v=>v/1000,v=>v/1e6],
+  [v=>v,v=>v/1000,v=>v*1000,v=>v/3.6,v=>v/3.6e6,v=>v/3412.14,v=>v/859.845],
+];
+let ucCatIdx=0;
+function ucCat(m,btn){
+  ucCatIdx=m;
+  document.querySelectorAll('#s-calc .tgroup button').forEach((b,i)=>{if(i<4)b.classList.toggle('active',i===m)});
+  const sel=id=>document.getElementById(id);
+  const buildOpts=(id)=>{sel(id).innerHTML=ucUnits[m].map((u,i)=>`<option value="${i}">${u.n}</option>`).join('');};
+  buildOpts('uc-from');buildOpts('uc-to');
+  if(document.getElementById('uc-to'))document.getElementById('uc-to').selectedIndex=1;
+  document.getElementById('uc-result').innerHTML='';
+}
+function ucSwap(){
+  const f=document.getElementById('uc-from'),t=document.getElementById('uc-to');
+  if(!f||!t)return;
+  const tmp=f.value;f.value=t.value;t.value=tmp;ucCalc();
+}
+function ucCalc(){
+  const val=pf(document.getElementById('uc-val')?.value);
+  if(!val){document.getElementById('uc-result').innerHTML='';return;}
+  const fi=parseInt(document.getElementById('uc-from')?.value||0);
+  const ti=parseInt(document.getElementById('uc-to')?.value||1);
+  const base=ucToBase[ucCatIdx][fi](val);
+  const result=ucUnits[ucCatIdx][ti].f(base);
+  const fromName=ucUnits[ucCatIdx][fi].n,toName=ucUnits[ucCatIdx][ti].n;
+  document.getElementById('uc-result').innerHTML=`<div class="result-box"><h4>✅ Result</h4><div class="result-item"><span class="rlabel">${val} ${fromName}</span><span class="rvalue">${n(result,6)} ${toName.split(' ')[0]}</span></div><div class="result-actions"><button onclick="shareText('⚡ Unit Conversion\\n${val} ${fromName} = ${n(result,6)} ${toName}')">📤 Share</button></div></div>`;
+}
+setTimeout(()=>{if(document.getElementById('uc-from'))ucCat(0,null);},50);
+
+// ============================================================
+//  TOOLS
+// ============================================================
+function showTool(id){
+  document.getElementById('tools-list').style.display='none';
+  document.getElementById('tool-panel').style.display='block';
+  document.getElementById('tool-content').innerHTML=getToolHTML(id);
+  window._currentTool=id;
+  if(id==='load')initLoad();
+}
+function closeTool(){
+  document.getElementById('tools-list').style.display='block';
+  document.getElementById('tool-panel').style.display='none';
+}
+
+function getToolHTML(id){
+  if(id==='wire') return wireGaugeHTML();
+  if(id==='speed') return motorSpeedHTML();
+  if(id==='load') return homeLoadHTML();
+  return '';
+}
+
+function wireGaugeHTML(){
+  const rows=[
+    ['0000(4/0)','11.68','107.2','230','195'],['000(3/0)','10.40','85.0','200','165'],['00(2/0)','9.27','67.43','175','145'],
+    ['0(1/0)','8.25','53.49','150','123'],['1','7.35','42.41','130','110'],['2','6.54','33.63','115','95'],
+    ['3','5.83','26.67','100','85'],['4','5.19','21.15','85','70'],['6','4.12','13.30','65','55'],
+    ['8','3.26','8.37','50','40'],['10','2.59','5.26','35','30'],['12','2.05','3.31','25','20'],
+    ['14','1.63','2.08','20','15'],['16','1.29','1.31','13','10'],['18','1.02','0.82','10','7'],
+    ['20','0.81','0.52','5','5'],['22','0.64','0.33','3','3'],['24','0.51','0.20','2','2'],
+  ];
+  return `<div class="card-title" style="font-size:16px;font-weight:800;margin-bottom:10px">📋 Wire Gauge Chart (AWG)</div>
+  <input type="text" id="wg-search" placeholder="Search AWG..." oninput="wgFilter()" style="margin-bottom:10px">
+  <div class="scroll-x">
+  <table class="tbl" id="wg-table">
+    <thead><tr><th>AWG</th><th>Dia(mm)</th><th>Area(mm²)</th><th>Cu(A)</th><th>Al(A)</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr class="wg-row"><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td><td style="color:var(--green);font-weight:700">${r[3]}</td><td style="color:var(--slate);font-weight:600">${r[4]}</td></tr>`).join('')}</tbody>
+  </table></div>`;
+}
+function wgFilter(){
+  const q=document.getElementById('wg-search').value.toLowerCase();
+  document.querySelectorAll('.wg-row').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});
+}
+
+function motorSpeedHTML(){
+  return `<div class="card-title" style="font-size:16px;font-weight:800;margin-bottom:10px">⚙️ Motor Speed Calculator</div>
+  <div class="card">
+    <div class="fbox" style="margin-bottom:14px">Ns = (120 × f) / P &nbsp;|&nbsp; Nr = Ns × (1 − s/100)</div>
+    <div class="sh">Number of Poles</div>
+    <div class="tgroup" style="flex-wrap:wrap">
+      ${[2,4,6,8,10,12].map(p=>`<span class="chip${p===4?' sel':''}" onclick="msPoles(${p},this)">${p} Poles</span>`).join('')}
+    </div>
+    <div class="field"><label>Supply Frequency <span>Hz</span></label><input type="number" id="ms-f" value="50" placeholder="50 or 60"></div>
+    <div class="field"><label>Slip <span>%</span></label><input type="number" id="ms-s" value="3" placeholder="Typical 2-5%"></div>
+    <div class="err" id="ms-err"></div>
+    <button class="btn btn-primary" onclick="calcMotorSpeed()" style="margin-top:8px">⚙️ Calculate Speed</button>
+    <div id="ms-result"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📊 Sync Speed Reference</div>
+    <table class="tbl"><thead><tr><th>Poles</th><th>50 Hz</th><th>60 Hz</th></tr></thead>
+    <tbody>${[[2,3000,3600],[4,1500,1800],[6,1000,1200],[8,750,900],[10,600,720],[12,500,600]].map(r=>`<tr><td>${r[0]}</td><td style="color:var(--primary);font-weight:700">${r[1]} RPM</td><td style="color:var(--purple);font-weight:700">${r[2]} RPM</td></tr>`).join('')}
+    </tbody></table>
+  </div>`;
+}
+let msPoleVal=4;
+function msPoles(v,el){msPoleVal=v;document.querySelectorAll('#tool-content .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');}
+function calcMotorSpeed(){
+  const f=pf(document.getElementById('ms-f')?.value),s=parseFloat(document.getElementById('ms-s')?.value||0);
+  if(!f){err('ms-err','Enter frequency.');return;}
+  clearErr('ms-err');
+  const Ns=120*f/msPoleVal,Nr=Ns*(1-s/100),slip=((Ns-Nr)/Ns)*100;
+  const items=[{l:'Synchronous Speed (Ns)',v:n(Ns,1),u:'RPM'},{l:'Actual Speed (Nr)',v:n(Nr,1),u:'RPM'},{l:'Slip',v:n(slip,2),u:'%'},{l:'Poles',v:msPoleVal,u:''},{l:'Frequency',v:f,u:'Hz'}];
+  document.getElementById('ms-result').innerHTML=makeResultHTML(items,'','`shareText(\'⚡ Motor Speed\\n'+items.map(i=>`${i.l}: ${i.v}${i.u?' '+i.u:''}`).join('\\n')+'\')`');
+}
+
+function homeLoadHTML(){
+  return `<div class="card-title" style="font-size:16px;font-weight:800;margin-bottom:10px">🏠 Home Load Calculator</div>
+  <div style="background:var(--green);border-radius:10px;padding:12px;color:#fff;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px" id="load-summary">
+    <div class="ls"><span>Total Load</span><span id="ls-w">0 W</span></div>
+    <div class="ls"><span>Daily Energy</span><span id="ls-kwh">0 kWh</span></div>
+    <div class="ls"><span>Monthly</span><span id="ls-mo">0 kWh</span></div>
+    <div class="ls"><span>Current @230V</span><span id="ls-a">0 A</span></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 70px 50px 60px 28px;gap:4px;margin-bottom:4px">
+    <div style="font-size:11px;font-weight:700;color:var(--text2)">Appliance</div>
+    <div style="font-size:11px;font-weight:700;color:var(--text2)">Watts</div>
+    <div style="font-size:11px;font-weight:700;color:var(--text2)">Qty</div>
+    <div style="font-size:11px;font-weight:700;color:var(--text2)">Hrs/day</div>
+    <div></div>
+  </div>
+  <div id="load-rows"></div>
+  <button onclick="loadAdd()" style="width:100%;border:1.5px dashed var(--border);background:none;color:var(--primary);padding:10px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;margin-top:6px">+ Add Appliance</button>
+  <div style="margin-top:10px;font-size:12px;color:var(--text2)">kWh = (Watts × Qty × Hrs) / 1000</div>`;
+}
+let loadApps=[
+  {n:'LED Bulbs',w:9,q:6,h:8},{n:'Ceiling Fans',w:75,q:3,h:12},
+  {n:'TV',w:120,q:1,h:6},{n:'Refrigerator',w:150,q:1,h:24},
+  {n:'Washing Machine',w:500,q:1,h:1},
+];
+function initLoad(){renderLoad();}
+function renderLoad(){
+  const rows=document.getElementById('load-rows');if(!rows)return;
+  rows.innerHTML=loadApps.map((a,i)=>`
+    <div class="load-row">
+      <input type="text" value="${a.n}" oninput="loadApps[${i}].n=this.value;loadSum()" style="padding:7px 8px;font-size:12px">
+      <input type="number" value="${a.w}" oninput="loadApps[${i}].w=+this.value||0;loadSum()" style="padding:7px 8px;font-size:12px">
+      <input type="number" value="${a.q}" oninput="loadApps[${i}].q=+this.value||1;loadSum()" style="padding:7px 8px;font-size:12px">
+      <input type="number" value="${a.h}" oninput="loadApps[${i}].h=+this.value||0;loadSum()" style="padding:7px 8px;font-size:12px">
+      <button class="load-del" onclick="loadRemove(${i})">×</button>
+    </div>`).join('');
+  loadSum();
+}
+function loadAdd(){loadApps.push({n:'New Appliance',w:100,q:1,h:4});renderLoad();}
+function loadRemove(i){loadApps.splice(i,1);renderLoad();}
+function loadSum(){
+  const W=loadApps.reduce((s,a)=>s+a.w*a.q,0);
+  const kwh=loadApps.reduce((s,a)=>s+a.w*a.q*a.h/1000,0);
+  const mo=kwh*30,amp=W/230;
+  const s=id=>document.getElementById(id);
+  if(s('ls-w'))s('ls-w').textContent=`${W.toFixed(0)} W`;
+  if(s('ls-kwh'))s('ls-kwh').textContent=`${kwh.toFixed(2)} kWh`;
+  if(s('ls-mo'))s('ls-mo').textContent=`${mo.toFixed(1)} kWh`;
+  if(s('ls-a'))s('ls-a').textContent=`${amp.toFixed(2)} A`;
+}
+
+// ============================================================
+//  FORMULA REFERENCE
+// ============================================================
+const refData=[
+  {title:"Ohm's Law",icon:'⚡',formulas:[
+    {name:'Voltage',f:'V = I × R',h:'V=Volts, I=Amperes, R=Ohms'},
+    {name:'Current',f:'I = V / R',h:'V=Volts, I=Amperes, R=Ohms'},
+    {name:'Resistance',f:'R = V / I',h:'V=Volts, I=Amperes, R=Ohms'},
+  ]},
+  {title:'Electrical Power',icon:'🔌',formulas:[
+    {name:'Power (basic)',f:'P = V × I',h:'P=Watts, V=Volts, I=Amps'},
+    {name:'Power (I²R)',f:'P = I² × R',h:'P=Watts, I=Amps, R=Ohms'},
+    {name:'Power (V²/R)',f:'P = V² / R',h:'P=Watts, V=Volts, R=Ohms'},
+    {name:'Current from P,V',f:'I = P / V',h:'P=Watts, V=Volts'},
+    {name:'Voltage from P,I',f:'V = P / I',h:'P=Watts, I=Amps'},
+    {name:'Power Factor',f:'pf = P / S = cos φ',h:'P=Real(W), S=Apparent(VA)'},
+  ]},
+  {title:'Single Phase',icon:'〰️',formulas:[
+    {name:'Real Power',f:'P = V × I × cos φ',h:'P=Watts, V=Volts, I=Amps'},
+    {name:'Apparent Power',f:'S = V × I',h:'S=VA, V=Volts, I=Amps'},
+    {name:'Reactive Power',f:'Q = V × I × sin φ',h:'Q=VAR'},
+    {name:'Power Triangle',f:'S² = P² + Q²',h:'Pythagoras relationship'},
+  ]},
+  {title:'Three Phase',icon:'🔀',formulas:[
+    {name:'Real Power',f:'P = √3 × VL × IL × cos φ',h:'VL=Line Voltage, IL=Line Current'},
+    {name:'Apparent Power',f:'S = √3 × VL × IL',h:'S=VA or kVA'},
+    {name:'Phase Voltage',f:'Vp = VL / √3',h:'For star (Y) connected load'},
+    {name:'Line Current (Y)',f:'IL = IP',h:'Star: line = phase current'},
+    {name:'Line Current (Δ)',f:'IL = √3 × IP',h:'Delta connection'},
+  ]},
+  {title:'Transformer',icon:'🔄',formulas:[
+    {name:'kVA (1-phase)',f:'kVA = V × I / 1000',h:'V=Volts, I=Amps'},
+    {name:'kVA (3-phase)',f:'kVA = √3 × VL × IL / 1000',h:'VL=Line, IL=Line current'},
+    {name:'Turns Ratio',f:'a = N1/N2 = V1/V2',h:'Primary to secondary ratio'},
+    {name:'Current Ratio',f:'I1/I2 = N2/N1',h:'Inverse of turns ratio'},
+    {name:'Efficiency',f:'η = Pout/Pin × 100%',h:'Typical: 95–99%'},
+  ]},
+  {title:'Motor',icon:'⚙️',formulas:[
+    {name:'FLA (1-phase)',f:'I = P / (V × η × pf)',h:'P=kW×1000'},
+    {name:'FLA (3-phase)',f:'I = P / (√3 × V × η × pf)',h:'P=kW×1000, V=Line voltage'},
+    {name:'Sync Speed',f:'Ns = 120f / P',h:'f=Hz, P=Poles, Ns=RPM'},
+    {name:'Slip',f:'s = (Ns-Nr)/Ns × 100%',h:'Nr=Actual speed'},
+    {name:'Torque',f:'T = 9550 × P(kW) / N(rpm)',h:'T=N·m'},
+  ]},
+  {title:'Cable & Voltage Drop',icon:'🔵',formulas:[
+    {name:'Resistance',f:'R = ρ × L / A',h:'ρ=resistivity, L=length(m), A=area(m²)'},
+    {name:'V-Drop (1Φ)',f:'ΔV = 2ρLI / A',h:'Factor 2 for return path'},
+    {name:'V-Drop (3Φ)',f:'ΔV = √3 × ρLI / A',h:'L=length one way'},
+    {name:'Drop %',f:'ΔV% = ΔV/V × 100',h:'Max 3% (IEE), 5% (NEC)'},
+    {name:'Cu Resistivity',f:'ρ = 1.72×10⁻⁸ Ω·m',h:'At 20°C'},
+    {name:'Al Resistivity',f:'ρ = 2.82×10⁻⁸ Ω·m',h:'At 20°C'},
+  ]},
+  {title:'Energy & Cost',icon:'💡',formulas:[
+    {name:'Energy',f:'E = P × t / 1000',h:'E=kWh, P=Watts, t=hours'},
+    {name:'Cost',f:'Cost = E × Rate',h:'E=kWh, Rate=₹/kWh'},
+    {name:'Monthly',f:'E/month = P × h/day × 30 / 1000',h:'kWh per month'},
+  ]},
+  {title:'Resistance Networks',icon:'🔗',formulas:[
+    {name:'Series',f:'R = R₁ + R₂ + R₃ + …',h:'Simply add all'},
+    {name:'Parallel',f:'1/R = 1/R₁ + 1/R₂ + …',h:'Sum of reciprocals'},
+    {name:'Two Parallel',f:'R = R₁R₂ / (R₁+R₂)',h:'Product over sum'},
+    {name:'Conductance',f:'G = 1/R',h:'Unit: Siemens (S)'},
+  ]},
+  {title:'Constants',icon:'🔢',formulas:[
+    {name:'√2',f:'= 1.41421',h:'Used in RMS calculations'},
+    {name:'√3',f:'= 1.73205',h:'Used in 3-phase calculations'},
+    {name:'1 HP',f:'= 745.7 W',h:'Horsepower to Watts'},
+    {name:'1 kWh',f:'= 3.6 MJ',h:'Energy conversion'},
+    {name:'India Supply',f:'230V / 50Hz',h:'Standard residential supply'},
+  ]},
+];
+let refBuilt=false;
+function buildRef(){
+  if(refBuilt)return;refBuilt=true;
+  document.getElementById('ref-list').innerHTML=refData.map((cat,i)=>`
+    <div class="acc-item">
+      <button class="acc-head" onclick="toggleAcc(${i})">
+        ${cat.icon} ${cat.title}
+        <span id="acc-arrow-${i}">▼</span>
+      </button>
+      <div class="acc-body" id="acc-body-${i}">
+        ${cat.formulas.map(f=>`<div class="formula-row"><div class="fn">${f.name}</div><div class="ff">${f.f}</div><div class="fh">${f.h}</div></div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+function toggleAcc(i){
+  const b=document.getElementById('acc-body-'+i),a=document.getElementById('acc-arrow-'+i);
+  b.classList.toggle('open');a.textContent=b.classList.contains('open')?'▲':'▼';
+}
+function filterRef(){
+  const q=document.getElementById('ref-search').value.toLowerCase();
+  if(!q){document.querySelectorAll('.acc-item').forEach(i=>i.style.display='');return;}
+  document.querySelectorAll('.acc-item').forEach(item=>{
+    const txt=item.textContent.toLowerCase();
+    item.style.display=txt.includes(q)?'':'none';
+  });
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+renderHomeHistory();
+</script>
+</body>
+</html>
